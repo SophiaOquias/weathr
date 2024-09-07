@@ -1,7 +1,8 @@
 #![allow(unused)]
 
 mod api; 
-
+// TODO: edit interface 
+// TODO: get input via cli using clap? 
 fn main() {
     let query = "cebu".to_string(); 
     match api::get_weather(query) {

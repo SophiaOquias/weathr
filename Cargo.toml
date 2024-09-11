@@ -4,10 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-image = "0.25.2"
 reqwest = { version = "0.12.7", features = ["json", "blocking"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-term_size = "0.3.2"
-termimage = "1.2.1"
 text-to-ascii-art = "0.1.10"

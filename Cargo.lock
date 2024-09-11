@@ -1661,6 +1661,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "text-to-ascii-art"
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8a0c8033260679bf366827afb9e13c308599a4b89aaabc7c6924495f88a248d3"
+
+[[package]]
 name = "textwrap"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2015,6 +2021,7 @@ dependencies = [
  "serde_json",
  "term_size",
  "termimage",
+ "text-to-ascii-art",
 ]
 
 [[package]]

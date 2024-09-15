@@ -1,5 +1,7 @@
 use reqwest;
 use serde::Deserialize;
+use dotenvy::dotenv; 
+use std::env; 
 
 #[derive(Deserialize)]
 pub struct WeatherResponse {
@@ -36,7 +38,8 @@ pub struct Coordinates {
 }
 
 pub fn get_coords() -> Result<Coordinates, Box<dyn std::error::Error>> {
-    let api_key = "d78d6f70c265c9".to_string(); 
+    dotenv().ok(); 
+    let api_key = env::var("IPINFO_API").expect("API key for ipinfo.io not found"); 
     let url = format!("http://ipinfo.io?token={}", api_key);
     
     let resp: Coordinates = reqwest::blocking::get(url)?.json()?;
@@ -45,7 +48,8 @@ pub fn get_coords() -> Result<Coordinates, Box<dyn std::error::Error>> {
 }
 
 pub fn get_weather(query: String) -> Result<WeatherResponse, Box<dyn std::error::Error>> {
-    let api_key = "76436078e0454ee8bd9131745240609".to_string();
+    dotenv().ok(); 
+    let api_key = env::var("WEATHER_API").expect("API key for weatherapi.com not found");
     let url = format!(
         "http://api.weatherapi.com/v1/current.json?key={}&q={}&aqi=no",
             api_key, 

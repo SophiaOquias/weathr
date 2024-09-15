@@ -2,22 +2,59 @@
 
 mod api; 
 use text_to_ascii_art::to_art; 
-// TODO: get input via cli using clap? 
-// TODO: get current location 
-// TODO: accept argument for temp unit f or c, default in c 
+use clap::Parser; 
+
+#[derive(Parser, Debug)]
+#[command(
+    name = "weathr", 
+    author = "Sophia <sophia.oquias@gmail.com>",
+    version = "0.1", 
+    about = "A simple CLI app to display temperature."
+)]
+struct Args {
+    #[arg(help = "input your current location, otherwise your approximate location")]
+    location: Option<String>, 
+
+    #[arg(short = 'f', long = "fahrenheit", help = "display temperature in Fahrenheit")]
+    fahrenheit: bool
+}
+
 fn main() {
-    // let query = get_coords()
-    //     .expect("Could not get current location");  
-    match api::get_weather("lahug".to_string()) {
+    let args = Args::parse();
+
+    let mut query: String; 
+
+    match args.location {
+        Some(location) => query = location,
+        None => {
+            let coords = api::get_coords()
+                .expect("Could not get current location"); 
+
+            query = coords.loc; 
+        }
+    }
+
+     
+    match api::get_weather(query) {
         Ok(weather) => {
-            match to_art(format!("{}*", weather.current.temp_c), "", 1, 0, 0) {
+            let mut unit: char = 'C'; 
+            let mut temperature: f32 = weather.current.temp_c; 
+            let mut feels_like: f32 = weather.current.feelslike_c; 
+
+            if(args.fahrenheit) {
+                unit = 'F'; 
+                temperature = weather.current.temp_f;
+                feels_like = weather.current.feelslike_f
+            }
+
+            match to_art(format!("{}*", temperature), "", 1, 1, 0) {
                 Ok(string) => println!("{}", string),
                 Err(err) => {
-                    println!("{}⁰", weather.current.temp_c); 
+                    println!("{}⁰{}", temperature, unit); 
                 },
             }
 
-            println!("Feels like {}⁰", weather.current.feelslike_c); 
+            println!("Feels like {}⁰{}", feels_like, unit); 
 
             println!("{}, {}, {}", 
                 weather.location.name, 
